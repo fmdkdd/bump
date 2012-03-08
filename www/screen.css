@@ -1,0 +1,73 @@
+@font-face {
+	font-family: 'MarioBros';
+	src: url('/font/prstartk.ttf');
+}
+
+body {
+	background-color: #6b8cff;
+	color: #fff;
+	font-family: 'MarioBros';
+}
+
+#scoreboard {
+	width: 800px;
+	margin: 2em auto;
+
+	border: 16px solid white;
+	border-radius: 32px;
+
+	box-shadow: 32px 32px 0 rgba(0,0,0,1);
+}
+
+#playerlist {
+	list-style: none;
+
+	text-transform: uppercase;
+	font-size: 64px;
+
+	margin: 64px 0;
+}
+
+#playerlist li {
+	position: relative;
+	margin-bottom: 32px;
+}
+
+#playerlist li:last-child {
+	margin-bottom: -32px;
+}
+
+#playerlist .score {
+	position: absolute;
+	right: 128px;
+	text-align: right;
+}
+
+#playerlist .coin {
+	position: absolute;
+	right: 32px;
+	height: 64px;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -webkit-optimize-contrast;
+}
+
+#bump {
+	font-family: 'MarioBros';
+	font-size: 32px;
+
+	display: block;
+	margin: auto;
+	margin-top: 2em;
+	height: 128px;
+	width: 256px;
+
+	border: 8px solid #fff;
+	border-radius: 16px;
+	background-color: #6b8cff;
+	color: #fff;
+}
+
+#bump:hover {
+	text-shadow: 8px 8px 0 rgba(0,0,0,1);
+	box-shadow: 8px 8px 0 rgba(0,0,0,1);
+}
