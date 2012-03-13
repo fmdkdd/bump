@@ -10,6 +10,9 @@
 				if (document.getElementById(player.name) === null)
 					addPlayer(player);
 
+				if (player.coin !== undefined)
+					coins[player.name] = player.coin;
+
 				updateScore(player);
 			});
 		});
@@ -26,8 +29,6 @@
 		li.id = player.name;
 		li.innerHTML = rowHTML(player.name, player.score, player.coin);
 		list.appendChild(li);
-
-		coins[player.name] = player.coin;
 	}
 
 	function rowHTML(name, score, coin) {
