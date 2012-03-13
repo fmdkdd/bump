@@ -30,24 +30,20 @@ io.configure(function() {
 	io.set('log level', 2);
 
 	io.set('authorization', function(handshakeData, callback) {
-		if (acceptAddress(handshakeData.address.address)) {
-			handshakeData.nickname = nickname(handshakeData.address.address);
-			callback(null, true);
-		} else {
-			callback("Unknown IP address", false);
-		}
+		handshakeData.nickname = nickname(handshakeData.address.address);
+
+		callback(null, true);
 	});
 });
 
 var whitelist = {
 	'127.0.0.1': 'fmk',
 	'172.16.21.190': 'fmk',
-	'172.16.21.189': 'mrw',
+	'172.16.21.188': 'mrw',
+	'172.16.21.186': 'thb',
+	'172.16.21.184': 'alx',
+	'172.16.21.182': 'glm',
 };
-
-function acceptAddress(ip) {
-	return typeof whitelist[ip] !== 'undefined';
-}
 
 function nickname(ip) {
 	return whitelist[ip];
@@ -59,22 +55,27 @@ io.sockets.on('connection', function(socket) {
 	db.forEach(function(key, val) {
 		socket.emit('new player', {
 			name: key,
-			score: val,
+			score: val.score,
 			coin: randomCoins[key]
 		});
 	});
 
 	socket.on('bump', function() {
-		saveBump(socket.handshake.nickname);
-		io.sockets.emit('bump', {
-			name: socket.handshake.nickname
-		});
+		if (socket.handshake.nickname) {
+			saveBump(socket.handshake.nickname);
+			io.sockets.emit('bump', {
+				name: socket.handshake.nickname
+			});
+		}
 	});
 });
 
 function saveBump(name) {
-	var score = db.get(name);
-	db.set(name, score + 1);
+	var score = db.get(name).score;
+	db.set(name, {
+		'score': score + 1,
+		'time': Date.now()
+	});
 }
 
 var randomCoins = {};
