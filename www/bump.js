@@ -6,12 +6,22 @@
 	function init() {
 		var socket = io.connect();
 		socket.on('connect', function() {
-			socket.on('new player', function(data) {
-				addPlayer(data);
+			socket.on('new player', function(player) {
+				if (document.getElementById(player.name) === null)
+					addPlayer(player);
+				else
+					updateScore(player);
+
+				players[player.name] = {
+					name: player.name,
+					score: player.score,
+					coin: player.coin
+				}
 			});
 
-			socket.on('bump', function(data) {
-				bumpPlayer(players[data.name]);
+			socket.on('bump', function(player) {
+				bumpPlayer(player.name);
+				updateScore(player);
 			});
 		});
 
@@ -27,12 +37,6 @@
 		li.id = player.name;
 		li.innerHTML = rowHTML(player.name, player.score, player.coin);
 		list.appendChild(li);
-
-		players[player.name] = {
-			name: player.name,
-			score: player.score,
-			coin: player.coin
-		}
 	}
 
 	function rowHTML(name, score, coin) {
@@ -41,9 +45,13 @@
 			+ '<img class="coin" src="/img/' + coin + '" />';
 	}
 
-	function bumpPlayer(player) {
+	function updateScore(player) {
 		var li = document.getElementById(player.name);
-		li.innerHTML = rowHTML(player.name, ++player.score, player.coin);
+		li.innerHTML = rowHTML(player.name, player.score, player.coin);
+	}
+
+	function bumpPlayer(name) {
+		++players[name].score;
 	}
 
 })();
