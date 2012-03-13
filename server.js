@@ -8,17 +8,10 @@ app.get('/', function (req, res) {
 	res.sendfile(__dirname + '/www/index.html');
 });
 
-app.get('/:path', function (req, res) {
-	res.sendfile(__dirname + '/www/' + req.params.path);
+app.get(/\/(.+)/, function (req, res) {
+	res.sendfile(__dirname + '/www/' + req.params);
 });
 
-app.get('/font/:path', function (req, res) {
-	res.sendfile(__dirname + '/www/font/' + req.params.path);
-});
-
-app.get('/img/:path', function (req, res) {
-	res.sendfile(__dirname + '/www/img/' + req.params.path);
-});
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Socket.IO
