@@ -148,7 +148,32 @@ function randomCoins(key) {
 }
 
 function randomCoin() {
-	return coins[Math.floor(Math.random() * coins.length)];
+	var usedCoins = values(savedCoins);
+
+	function notUsed(coin) {
+		return usedCoins.indexOf(coin) === -1;
+	}
+
+	var freeCoins = coins.filter(notUsed);
+
+	if (freeCoins.length === 0)
+		return arrayRandom(coins);
+	else
+		return arrayRandom(freeCoins);
+}
+
+function values(obj) {
+	var vals = [];
+	for (var key in obj)
+		vals.push(obj[key]);
+	return vals;
+}
+
+function arrayRandom(arr) {
+	if (arr.length === 0)
+		return null;
+	else
+		return arr[Math.floor(Math.random() * arr.length)];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
