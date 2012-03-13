@@ -46,19 +46,27 @@ function nickname(ip) {
 
 io.sockets.on('connection', function(socket) {
 	db.forEach(function(key, val) {
-		socket.emit('new player', {
-			name: key,
-			score: val.score,
-			coin: randomCoins[key]
+		socket.emit('player update', {
+			'name': key,
+			'score': val.score,
+			'coin': randomCoins(key)
 		});
 	});
 
 	socket.on('bump', function() {
-		if (socket.handshake.nickname) {
-			saveBump(socket.handshake.nickname);
-			io.sockets.emit('bump', {
-				name: socket.handshake.nickname
-			});
+		var name = socket.handshake.nickname;
+		if (name) {
+			var update = {
+				'name': name
+			};
+
+			if (db.get(name) === undefined)
+				update.coin = randomCoins(key);
+
+			bumpAndSave(name);
+			update.score = db.get(name).score;
+
+			io.sockets.emit('player update', update);
 		}
 	});
 
@@ -69,8 +77,11 @@ io.sockets.on('connection', function(socket) {
 	});
 });
 
-function saveBump(name) {
-	var score = db.get(name).score;
+function bumpAndSave(name) {
+	var score = 0;
+	if (db.get(name) !== undefined)
+		var score = db.get(name).score;
+
 	db.set(name, {
 		'score': score + 1,
 		'time': Date.now()
@@ -107,8 +118,6 @@ function fetchStats(player, callback) {
 	});
 }
 
-var randomCoins = {};
-
 const coins = [
 	"chest.png",
 	"cloud.png",
@@ -130,6 +139,14 @@ const coins = [
 	"wing.png",
 ];
 
+var savedCoins = {};
+
+function randomCoins(key) {
+	if (savedCoins[key] === undefined)
+		savedCoins[key] = randomCoin();
+	return savedCoins[key];
+}
+
 function randomCoin() {
 	return coins[Math.floor(Math.random() * coins.length)];
 }
@@ -143,9 +160,5 @@ const dbFile = 'scores.db';
 var db = require('dirty')(dbFile);
 
 db.on('load', function() {
-	db.forEach(function(key, val) {
-		randomCoins[key] = randomCoin();
-	});
-
 	app.listen(port);
 });
