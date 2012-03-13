@@ -68,6 +68,12 @@ io.sockets.on('connection', function(socket) {
 			});
 		}
 	});
+
+	socket.on('stats', function(data) {
+		fetchStats(data.player, function(stats) {
+			socket.emit('stats', stats);
+		});
+	});
 });
 
 function saveBump(name) {
@@ -75,6 +81,36 @@ function saveBump(name) {
 	db.set(name, {
 		'score': score + 1,
 		'time': Date.now()
+	});
+}
+
+var fs = require('fs');
+
+// Return all entries for player in the db file
+function fetchStats(player, callback) {
+	fs.readFile(dbFile, 'utf8', function(err, content) {
+		var lines = content.split('\n');
+		var stats = lines
+			.filter(nonEmpty)
+			.map(JSON.parse)
+			.filter(playerBump)
+			.map(extractStats);
+		callback(stats);
+
+		function nonEmpty(line) {
+			return line.length > 0;
+		}
+
+		function playerBump(bump) {
+			return bump.key === player && bump.val.time !== undefined;
+		}
+
+		function extractStats(bump) {
+			return {
+				'score': bump.val.score,
+				'time': bump.val.time
+			};
+		}
 	});
 }
 
