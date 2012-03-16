@@ -62,7 +62,7 @@ io.sockets.on('connection', function(socket) {
 			};
 
 			if (db.get(name) === undefined)
-				update.coin = randomCoins(key);
+				update.coin = randomCoins(name);
 
 			bumpAndSave(name);
 			update.score = db.get(name).score;
