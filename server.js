@@ -8,6 +8,12 @@ app.get('/', function (req, res) {
 	res.sendfile(__dirname + '/www/index.html');
 });
 
+app.get('/api/stats/:name', function (req, res) {
+	fetchStats(req.params.name, function(stats) {
+		res.send(stats);
+	});
+});
+
 app.get(/\/(.+)/, function (req, res) {
 	res.sendfile(__dirname + '/www/' + req.params);
 });
