@@ -71,3 +71,23 @@ body {
 	text-shadow: 8px 8px 0 rgba(0,0,0,1);
 	box-shadow: 8px 8px 0 rgba(0,0,0,1);
 }
+
+#names ul {
+	list-style: none;
+}
+
+#names ul li {
+	float: left;
+	width: 80px;
+	text-transform: uppercase;
+	color: #bbb;
+	cursor: default;
+}
+
+#names ul li:hover {
+	color: #ddd;
+}
+
+#names ul li.selected {
+	color: #fff;
+}
