@@ -58,7 +58,7 @@
 	function img(coin) {
 		var h = document.createElement('img');
 		h.classList.add('coin');
-		h.src = '/img/' + coin + '.png';
+		h.src = 'img/' + coin + '.png';
 		return h;
 	}
 
