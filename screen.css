@@ -32,6 +32,21 @@ body {
 
 	image-rendering: -moz-crisp-edges;
 	image-rendering: -webkit-optimize-contrast;
+
+	animation-duration: 1s;
+	animation-name: rotatein;
+}
+
+@keyframes rotatein {
+	from {
+		height: 0px;
+		transform: rotate(-270deg);
+	}
+
+	to {
+		height: 64px;
+		transform: rotate(180deg);
+	}
 }
 
 #bump {
